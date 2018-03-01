@@ -1,8 +1,8 @@
 function Snake() {
     this.x = 0;
     this.y = 0;
-    this.vx = 1;
-    this.vy = 0;
+    this.vx = 0;
+    this.vy = 1;
     this.size = 0;
     this.growthQueue = 0;
     this.tail = [];
@@ -34,20 +34,20 @@ function Snake() {
         }
 
         // update location
-        this.x += this.vx * scl;
-        this.y += this.vy * scl;
+        this.x += this.vx;
+        this.y += this.vy;
 
         // constrain location to within canvas boundaries
-        this.x = constrain(this.x, 0, width - scl);
-        this.y = constrain(this.y, 0, height - scl);
+        this.x = constrain(this.x, 0, gridSize - 1);
+        this.y = constrain(this.y, 0, gridSize - 1);
     }
 
     this.show = function() {
         fill(snakeColor);
         for (var i = 0; i < this.tail.length; i++) {
-            rect(this.tail[i].x, this.tail[i].y, scl, scl);
+            rect(this.tail[i].x * scl, this.tail[i].y * scl, scl, scl);
         }
-        rect(this.x, this.y, scl, scl);
+        rect(this.x * scl, this.y * scl, scl, scl);
     }
     this.dir = function(vect) {
         this.vx = vect.x;

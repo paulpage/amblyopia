@@ -5,38 +5,47 @@ var gui;
 
 var snake;
 var food;
-var scl = 20;
+var scl;
 var movementQueue = [];
 var score;
 var scoreElement;
 var growthFactor = 5;
+var gridSize = 20;
 
-function setup() {
-    gui = createGui('Settings');
-    gui.addGlobals('snakeColor', 'foodColor');
-    createCanvas(600, 600);
-    frameRate(10);
-
-    scoreElement = createP("Score: 0");
-
-    snake = new Snake();
-    score = 0;
-    pickLocation();
+function windowResized() {
+    // set canvas size to the largest square that can fit in the window
+    var size = min(windowWidth, windowHeight);
+    resizeCanvas(size, size);
+    scl = size / gridSize;
 }
 
-function pickLocation() {
-    var cols = floor(width/scl);
-    var rows = floor(height/scl);
-    food = createVector(floor(random(cols)), floor(random(rows)));
-    food.mult(scl);
+function setup() {
+    // set canvas size to the largest square that can fit in the window
+    var size = min(windowWidth, windowHeight);
+    createCanvas(size, size);
+    scl = size / gridSize;
+
+    // create gui
+    gui = createGui('Settings');
+    gui.addGlobals('snakeColor', 'foodColor');
+
+    frameRate(10);
+
+    // initialize game
+    snake = new Snake();
+    score = 0;
+    newFood();
+}
+
+function newFood() {
+    food = createVector(floor(random(gridSize)), floor(random(gridSize)));
 }
 
 function draw() {
-    scoreElement.html("Score: " + score);
     background(backgroundColor);
 
     fill(foodColor);
-    rect(food.x, food.y, scl, scl);
+    rect(food.x * scl, food.y * scl, scl, scl);
 
     if (snake.death()) {
         score = 0;
@@ -53,9 +62,12 @@ function draw() {
 
 
     if (snake.eat(food)) {
-        pickLocation();
+        newFood();
         score++;
     }
+    textSize(32);
+    fill('white');
+    text('Score: ' + score, 20, windowHeight - 20);
 }
 
 function keyPressed() {
