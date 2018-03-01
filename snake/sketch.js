@@ -56,18 +56,17 @@ function draw() {
         movementQueue.splice(0, 1);
     }
 
-
     snake.update();
     snake.show();
-
 
     if (snake.eat(food)) {
         newFood();
         score++;
     }
+
     textSize(32);
     fill('white');
-    text('Score: ' + score, 20, windowHeight - 20);
+    text('Score: ' + score, 20, height - 20);
 }
 
 function keyPressed() {
